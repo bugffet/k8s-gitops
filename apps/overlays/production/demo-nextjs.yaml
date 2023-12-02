@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-nextjs
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: prod
+  template:
+    metadata:
+      name: {{cluster}}-demo-nextjs
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: {{cluster}}-demo-nextjs
+      project: default
+      source:
+        repoURL: https://github.com/bugffet/k8s-gitops.git
+        targetRevision: HEAD
+        path: demo-nextjs
