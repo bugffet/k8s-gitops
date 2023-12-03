@@ -49,3 +49,13 @@ output "id" {
 output "pool" {
   value = linode_lke_cluster.lke.pool
 }
+
+resource "null_resource" "lke_config" {
+  depends_on = [
+    linode_lke_cluster.lke
+  ]
+
+  provisioner "local-exec" {
+    command = "/bin/bash scripts/export-config.sh"
+  }
+}
